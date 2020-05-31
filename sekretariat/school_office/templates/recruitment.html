@@ -1,0 +1,16 @@
+{% extends "logbase.html" %}
+{% block content %}
+
+<div class="recruitment">
+<div class="card" style="width: 18rem;">
+  <div class="card-header">
+    Rekrutacja
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item"><a class="btn" href="info">Informacje</a></li>
+    <li class="list-group-item"><a class="btn" href="{% url 'recruitment1' %}">Formularz online</a></li>
+    <li class="list-group-item"><a class="btn" href="{% url 'documents' %}">Formularze - wersja do wydruku</a></li>
+  </ul>
+</div>
+    </div>
+{% endblock %}

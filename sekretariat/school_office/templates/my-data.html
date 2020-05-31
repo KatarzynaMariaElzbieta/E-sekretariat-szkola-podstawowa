@@ -1,0 +1,12 @@
+{% extends "logbase.html" %}
+{% block content %}
+<p>{{ mess }}</p>
+<h2>Moje dane</h2>
+<div>
+    <p>Nazwa użytkownika: {{user.username}}</p>
+    <p>Imię: {{user.first_name}}</p>
+    <p>Nazwisko: {{user.last_name}}</p>
+    <p>Hasło: <a href="{% url 'reset-password' %}">Zmień hasło</a></p>
+</div>
+
+{% endblock %}

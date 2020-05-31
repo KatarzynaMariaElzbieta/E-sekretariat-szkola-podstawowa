@@ -1,0 +1,16 @@
+{% extends "logbase.html" %}
+{% block content %}
+
+<div class="recruitment">
+<div class="card" style="width: 18rem;">
+  <div class="card-header">
+    Rekrutacja
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item"><a class="btn" href="{% url 'RecruitmentView' 0 %}">Oddział "0"</a></li>
+    <li class="list-group-item"><a class="btn" href="{% url 'RecruitmentView' 1 %}">Klasa I</a></li>
+    <li class="list-group-item"><a class="btn" href="{% url 'RecruitmentView' 3 %}">Inna klasa</a></li>
+  </ul>
+</div>
+    </div>
+{% endblock %}

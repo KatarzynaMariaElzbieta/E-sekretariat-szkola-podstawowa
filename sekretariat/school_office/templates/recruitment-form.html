@@ -1,0 +1,71 @@
+{% extends "logbase.html" %}
+{% block content %}
+{{ block.super }}
+
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+{% load crispy_forms_tags %}
+
+<div class="recruitment" id="recruitment-form">
+
+    <form method="post">
+        <h1>Dane dziecka</h1>
+        {% csrf_token %}
+        {{ form|crispy }}
+
+        <h2>Adres zamieszkania:</h2>
+        {{ permanent_address_form|crispy }}
+
+        <label>Adres zameldowania inny niż zamieszkania</label>
+        <input type="checkbox" id="residental_like_pernament" name="residential_like_permanent" value="True">
+
+        <div class='residental_address' id='child_residential_address'>
+            <h2>Adres zameldowania:</h2>
+            {{ residential_address_form|crispy }}
+        </div>
+
+        <h1>Dane matki:</h1>
+        {{ mother_form|crispy }}
+        <label>Adres zamieszkania inny niż dziecka</label>
+        <input type="checkbox" id="mother_address_like_child" name="address_like_child" value="True">
+
+        <div class='residental_address' id="mother_residental_address" >
+        {{ mother_permanent_address_form|crispy }}
+        </div>
+
+        <h1>Dane ojca:</h1>
+        {{ father_form|crispy }}
+        <label>Adres zamieszkania inny niż dziecka</label>
+        <input type="checkbox" id="father_address_like_child" name="address_like_child" value="True">
+
+        <div class='residental_address' id="father_residental_address">
+        {{ father_permanent_address_form|crispy }}
+        </div>
+
+        <div class="no_catchment_area_information" id="no_catchment_area_information_form">
+            <h2>Informacje dodatkowe:</h2>
+            {{ no_catchment_area_information_form|crispy }}
+        </div>
+        <h1>Zobowiązuję się do:</h1>
+        {{ approval_form|crispy }}
+
+        <div>
+            <h4>Pouczenie</h4>
+            <p>
+                1. Dane osobowe zawarte w niniejszym wniosku i załącznikach do wniosku będą wykorzystywane wyłącznie dla
+                potrzeb związanych z postępowaniem rekrutacyjnym, prowadzonym na podstawie ustawy z dnia 14 grudnia 2016
+                r. Prawo Oświatowe art. 133 (Dz. U. z 2017 r. poz. 60).
+            </p>
+            <p>
+                2. Administratorem danych osobowych zawartych we wniosku oraz załącznikach do wniosku jest Zespół
+                Szkolno – Przedszkolny w Zabrodziu, ul. Szkolna 3, 07-230 Zabrodzie. Pełna treść informacji o
+                Administratorze danych, celu i zakresie przetwarzania oraz prawach osób, których dane dotyczą dostępna
+                na stronie www lub w siedzibie organizacji.
+            </p>
+
+        </div>
+
+        <br><input id="submit" type="submit" value="Dalej">
+    </form>
+</div>
+<script src="/static/css/menu2.js"></script>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "logbase.html" %}
+{% block content %}
+
+<div class="recruitment">
+<div class="card" style="width: 18rem;">
+  <div class="card-header">
+    Rekrutacja
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item"><a class="btn" href="{% url 'pdf' '0' %}">Oddział "0" z obwodu szkoły</a></li>
+    <li class="list-group-item"><a class="btn" href="{% url 'pdf' '0z' %}">Oddział "0" spoza obwodu szkoły</a></li>
+    <li class="list-group-item"><a class="btn" href="{% url 'pdf' '1' %}">Klasa I z obwodu szkoły</a></li>
+    <li class="list-group-item"><a class="btn" href="{% url 'pdf' '1z' %}">Klasa I spoza obwodu szkoły</a></li>
+    <li class="list-group-item"><a class="btn" href="{% url 'pdf' '3' %}">Inna klasa z obwodu szkoły</a></li>
+  </ul>
+</div>
+    </div>
+{% endblock %}

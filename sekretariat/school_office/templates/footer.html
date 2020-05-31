@@ -1,0 +1,10 @@
+<div id="footer" class="container">
+    <hr />
+    <footer>
+    {% block footer %}
+      {# Global context #}
+      Generated: {{ time_now|date:'Y-m-d H:i:s' }} |
+      Server load: {{ server_load }}
+    {% endblock %}
+    </footer>
+  </div>

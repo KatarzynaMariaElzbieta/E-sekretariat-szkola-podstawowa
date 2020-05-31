@@ -1,0 +1,33 @@
+* {
+  box-sizing: border-box;
+}
+body {
+    background-color: aquamarine;
+}
+section {
+  float: left;
+  height: 100%; /* only for demonstration, should be removed */
+  background: #ccc;
+  padding: 20px;
+}
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+nav span {
+    font-size: 25px;
+}
+
+
+.recruitment {
+    padding-left: 300px;
+    text-align: center;
+}
+/* Style the list inside the menu */
+.card-header {
+    font-size: xx-large;
+}
+
+footer {
+    margin-inside: 30px;
+}
