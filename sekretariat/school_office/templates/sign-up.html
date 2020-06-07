@@ -1,9 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
-{% load crispy_forms_tags %}
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+{% load bootstrap %}
+
 <form method="post">
 {% csrf_token %}
-    {{ form|crispy }}
-        <br><input type="submit" value="Zarejestruj">
+    {{ form|bootstrap }}
+        <br><input type="submit" id='reset_button' value="Zarejestruj">
 </form>
+<script src="/static/javascript/menu.js"></script>
+
 {% endblock %}

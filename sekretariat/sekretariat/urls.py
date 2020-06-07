@@ -16,11 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from school_office.views import base, SignUp, Login, logoutView, recruitment1, RecruitmentView, pdf_view, documents, \
-    my_data, ResetPasswordView
+    my_data, ResetPasswordView, application_list, application_detail, ApplicationFormView, change_status, RecruitDetailView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('base/', base),
+    path('base/', base, name='base'),
     path('signup/', SignUp.as_view(), name="signup"),
     path('', Login.as_view(), name="signin"),
     path('logout/', logoutView, name="logout"),
@@ -30,5 +30,10 @@ urlpatterns = [
     path('my-data/', my_data, name='my_data'),
     path('change-password/', ResetPasswordView.as_view(), name='reset-password'),
     path('pdf/<str:klasa>', pdf_view, name='pdf'),
+    path('application/', application_list, name='app-list'),
+    path('new-application', ApplicationFormView.as_view(), name='new_app'),
+    path('RecruitDetailView/<int:pk>', RecruitDetailView.as_view(), name='recruit'),
+    path('application/<int:id>', application_detail, name='application-detail'),
+    path('application/<int:id>/<int:status>', change_status, name='change-status'),
 
 ]

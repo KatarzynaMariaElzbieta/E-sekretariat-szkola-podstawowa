@@ -1,12 +1,25 @@
+$(function () {
+    console.log('dziala')
+    var button = document.querySelector('#reset_button');
+    console.log(button)
+    var pass = document.querySelector('#id_password');
+    console.log(pass)
 
-var child_residential_address = document.getElementById('child_residential_address');
-console.log(child_residential_address)
+    var pass2 = document.querySelector('#id_password2');
+    var regPass = /^(?=.*\d)(?=.*[A-z]).{5,}$/i;
 
-document.addEventListener("DOMContentLoaded", function () {
+    button.addEventListener('click', function(e) {
+        if(pass.value.length > 8 && pass.value === pass2.value && regPass.test(pass.value)){
 
-    var child_residential_address = document.getElementById('child_residential_address');
-    var checkbox = document.getElementByTagName("residential_like_permanent");
-    checkbox.addEventListener('click', function(){
-        child_residential_address.parentElement.removeChild(child_residential_address);
-    });
+        } else {
+            console.log('haslo')
+            console.log(regPass.test(pass.value))
+            pass.after("Twoje hasło nie może być zbyt podobne do twoich innych danych osobistych.\n" +
+                "Twoje hasło musi zawierać co najmniej 8 znaków.\n" +
+                "Twoje hasło nie może być powszechnie używanym hasłem.\n" +
+                "Twoje hasło nie może składać się tylko z cyfr.")
+            e.preventDefault();
+        }
+    })
+
 });

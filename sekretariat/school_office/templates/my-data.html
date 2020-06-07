@@ -8,5 +8,10 @@
     <p>Nazwisko: {{user.last_name}}</p>
     <p>Hasło: <a href="{% url 'reset-password' %}">Zmień hasło</a></p>
 </div>
-
+<h5>Dzieci:</h5>
+<ul>
+{% for i in children %}
+<li><a href="{% url 'recruit' i.id %}">{{i.first_name}} {{i.last_name}}</a></li>
+{% endfor %}
+</ul>
 {% endblock %}

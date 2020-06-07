@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
-{% load crispy_forms_tags %}
+{% load bootstrap %}
+
+<!--{% load crispy_forms_tags %}-->
 {{ notlog }}
 <form method="post">
 {% csrf_token %}
-    {{ form|crispy }}
+    {{ form|bootstrap }}
         <br><input type="submit" value="Zaloguj">
 </form>
 {% endblock %}

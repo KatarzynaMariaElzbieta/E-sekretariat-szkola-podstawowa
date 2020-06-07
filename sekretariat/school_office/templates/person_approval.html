@@ -1,0 +1,57 @@
+<div class="app_list"></div>
+
+<table class="approval" border="1px">
+    <tr>
+        <th>Przestrzeganie statutu</th>
+        <th>Zobowiązanie aktualuzacji danych</th>
+        <th>Zebrania rodziców</th>
+        <th>Uczestnictwo dziecka w religii</th>
+        <th>Publikacja zdjęć</th>
+        <th>Prawdziwość informacji</th>
+        <th>Przetwarznie danych osobowych</th>
+    </tr>
+    <tr>
+        <td> {% if object.approval.statutes == True %}
+            TAK
+            {% else %}
+            NIE
+            {% endif %}
+        </td>
+        <td> {% if object.approval.data_updating == True %}
+            TAK
+            {% else %}
+            NIE
+            {% endif %}
+        </td>
+        <td> {% if object.approval.nonconference == True %}
+            TAK
+            {% else %}
+            NIE
+            {% endif %}
+        </td>
+        <td> {% if object.approval.religion == True %}
+            TAK
+            {% else %}
+            NIE
+            {% endif %}
+        </td>
+        <td> {% if object.approval.photo_publication == True %}
+            TAK
+            {% else %}
+            NIE
+            {% endif %}
+        </td>
+        <td> {% if object.approval.processing_of_personal_data == True %}
+            TAK
+            {% else %}
+            NIE
+            {% endif %}
+        </td>
+        <td> {% if object.approval.provision == True %}
+            TAK
+            {% else %}
+            NIE
+            {% endif %}
+        </td>
+    </tr>
+</table>

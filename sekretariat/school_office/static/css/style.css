@@ -2,13 +2,22 @@
   box-sizing: border-box;
 }
 body {
-    background-color: aquamarine;
+    background-color: hsla(65, 18%, 96%, 1);
+            /*skyblue;*/
+}
+
+.content {
+    padding-top: 30px;
+    margin-left: 35%;
+    margin-right: 30%;
 }
 section {
   float: left;
   height: 100%; /* only for demonstration, should be removed */
-  background: #ccc;
+  background: #cccc;
   padding: 20px;
+  padding-bottom: 100%;
+;
 }
 ul {
     list-style-type: none;
@@ -20,7 +29,7 @@ nav span {
 
 
 .recruitment {
-    padding-left: 300px;
+
     text-align: center;
 }
 /* Style the list inside the menu */
@@ -30,4 +39,42 @@ nav span {
 
 footer {
     margin-inside: 30px;
+}
+
+/*formularze*/
+.control-label {
+    background-color: hsla(220, 20%, 80%, 0.9);
+    width: 100%;
+    font-weight: bold;
+    text-align: center;
+
+}
+
+th {
+    background-color: lightgray;
+}
+
+td{
+    text-align: center;
+}
+
+h1, h2, h5, .approval th{
+    text-align: center;
+    margin-top: 15%;
+    color: hsla(65, 18%, 96%, 0.9);
+    background-color: hsla(39, 28%, 14%, 1);
+}
+h1{
+        margin-right: 0%;
+
+}
+p h2 {
+        margin-right: 20%;
+}
+.detail{
+    display: inline-block;
+    width: 40%;
+}
+table{
+    width: 70%;
 }

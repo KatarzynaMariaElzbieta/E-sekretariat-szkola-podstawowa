@@ -1,0 +1,48 @@
+{% extends "logbase.html" %}
+{% block content %}
+
+<div class="app_list">
+    <h2>{{object.first_name}} {{object.last_name}}</h2>
+</div>
+<div class="personal_data"><h5>Informacje podstawowe:</h5>
+    <p>Klasa: {{object.school_class}}</p>
+    <p>PESEL: {{object.PESEL}}</p>
+    <p>Data urodzenia: {{object.birthdate}}</p>
+    <p>Miejsce urodzenia: {{object.birthplace}}</p>
+</div>
+<div class="addres">
+    <div class="permanent_address detail">
+        <p><h5>Adres zamieszkania:</h5></p>{% include 'address.html' with address=object.permanent_address %}
+    </div>
+    {% if permanent_address != residential_address %}
+    <div class="residential_address detail">
+        <p><h5>Adres zameldowania:</h5></p>{% include 'address.html' with address=object.residential_address %}
+    </div>
+</div>
+{% endif %}
+<div class="parent">
+    <div class="mother_data detail">
+        <p><h5>Dane matki:</h5></p>{% include 'parent-detail.html' with parent=object.mother %}
+    </div>
+    <div class="father_data detail">
+        <p><h5>Dane ojca:</h5>
+        <p>{% include 'parent-detail.html' with parent=object.father %}
+    </div>
+</div>
+<div class="detail>"><h5>Informacje dodatkowe:</h5>
+    <p> {% if object.further_information %} {{object.further_information}} {%else %} Brak {%endif %}</p></div>
+<p>Przynależność do obwodu szkoły:
+    {% if object.no_catchment_area == False %}
+    TAK
+    {% else %}
+    NIE
+    {% endif %}
+
+</p>
+<div>
+    <p>Wyrażone zgody: </p>{% include 'person_approval.html' with approval=object.approval %}
+</div>
+
+<!--      <li class="list-group-item"><a class="btn" href="{% url 'RecruitmentView' 3 %}">Inna klasa</a></li>-->
+
+{% endblock %}

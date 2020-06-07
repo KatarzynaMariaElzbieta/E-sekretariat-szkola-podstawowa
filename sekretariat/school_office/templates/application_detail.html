@@ -1,0 +1,48 @@
+{% extends "logbase.html" %}
+{% block content %}
+<div class="applicatoin-detail">
+<div class="app_list">
+    <h2>Szczegóły podania</h2>
+</div>
+<table>
+    <tr>
+        <th>Numer podania</th>
+        <td>{{app.id}}</td>
+    </tr>
+    <tr>
+        <th>Data wysłania</th>
+        <td>{{app.sent_date}}</td>
+    </tr>
+    <tr>
+        <th>Typ podania</th>
+        <td>{{app.get_type_display}}</td>
+
+
+    </tr>
+    <tr>
+        <th>Uczeń</th>
+        <td><a href="{% url 'recruit' app.recruit.id %}">{{app.recruit.first_name}} {{app.recruit.last_name}}</a></td>
+    </tr>
+    <tr>
+        <th>Treść:</th>
+        <td>{{app.application_content}}</td>
+    </tr>
+    <tr>
+        <th>Status</th>
+        <td>{{app.get_application_status_display}}</td>
+        <td>{% if status %}
+            <a href="{% url 'change-status' app.id 2 %}">Zaakceptuj</a>
+            <a href="{% url 'change-status' app.id 3 %}">Odrzuć</a>
+            {% endif %}
+        </td>
+
+
+    </tr>
+</table>
+
+<!--      <li class="list-group-item"><a class="btn" href="{% url 'RecruitmentView' 3 %}">Inna klasa</a></li>-->
+
+</div>
+</div>
+</div>
+{% endblock %}

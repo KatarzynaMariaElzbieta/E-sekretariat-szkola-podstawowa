@@ -1,0 +1,21 @@
+{% extends "logbase.html" %}
+{% block content %}
+{{ block.super }}
+{% load bootstrap %}
+
+<div class="recruitment" id="recruitment-form">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label class="control-label">Dotyczy:</label>
+            <select name="recruit" class="form-control">
+                {% for i in children %}
+                <option value="{{i.id}}">{{i.first_name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {{ form|bootstrap }}
+        <br><input id="submit" type="submit" value="Wyślij">
+    </form>
+</div>
+{% endblock %}

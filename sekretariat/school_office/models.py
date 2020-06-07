@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
@@ -44,19 +45,19 @@ class Address(models.Model):
     county = models.CharField(verbose_name='powiat', max_length=64)
     borough = models.CharField(verbose_name='gmina', max_length=64)
     locality = models.CharField(verbose_name='miejscowość', max_length=64)
-    postcode = models.CharField(verbose_name='kod pocztowy', max_length=64)
+    postcode = models.CharField(verbose_name='kod pocztowy', max_length=6)
     street = models.CharField(verbose_name='ulica', max_length=64)
     house_number = models.CharField(verbose_name='numer domu', max_length=4)
     flat_number = models.CharField(verbose_name='numer mieszkania', max_length=4, null=True)
-    phone_number = models.IntegerField(verbose_name='numer telefonu', null=True)
+    phone_number = models.CharField(verbose_name='numer telefonu', max_length=9, null=True)
 
 
 class Parent(models.Model):
     first_name = models.CharField(verbose_name='Imię', max_length=64)
     last_name = models.CharField(verbose_name='Nazwisko',max_length=64)
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
-    tel = models.IntegerField(verbose_name='Telefon',)
-    have_job = models.BooleanField(verbose_name='Praca',)
+    tel = models.CharField(verbose_name='Telefon', max_length=9)
+    have_job = models.BooleanField(verbose_name='Praca')
 
 
 class Approval(models.Model):
@@ -72,25 +73,25 @@ class Approval(models.Model):
 class Recruit(models.Model):
     first_name = models.CharField(verbose_name='Imię', max_length=64)
     last_name = models.CharField(verbose_name='Nazwisko', max_length=64)
-    PESEL = models.IntegerField(verbose_name='PESEL', unique=True)
-    birthdate = models.DateField(verbose_name='Data urodzenia' )
+    PESEL = models.CharField(verbose_name='PESEL', max_length=11, unique=True)
+    birthdate = models.DateField(verbose_name='Data urodzenia')
     birthplace = models.CharField(verbose_name='Miejsce urodzenia', max_length=64)
     permanent_address = models.ForeignKey(Address, verbose_name='Adres zamieszkania', related_name='permanent', on_delete=models.CASCADE)
     residential_address = models.ForeignKey(Address, verbose_name='Adres zameldowania', related_name='residental', on_delete=models.CASCADE)
     further_information = models.TextField(verbose_name='Dodatkowe informacje', null=True)
-    catchment_area = models.BooleanField(verbose_name='Przynależność do obwodu szkoły')
+    no_catchment_area = models.BooleanField(verbose_name='Spoza obwodu szkoły', default=False)
     application_status = models.IntegerField(verbose_name='Status aplikacji', choices=STATUS)
     mother = models.ForeignKey(Parent, related_name='mother', on_delete=models.CASCADE)
     father = models.ForeignKey(Parent, related_name='father', on_delete=models.CASCADE)
     school_class = models.IntegerField(choices=CLASSES, default=0, verbose_name='Klasa')
     approval = models.ForeignKey(Approval, on_delete=models.CASCADE, null=True)
-
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=6)
 
 FAMILY = (
     (1, 'Pełna'),
-    (2, 'niepełna'),
-    (3, 'rozbita'),
-    (4, 'inna sytuacja')
+    (2, 'Niepełna'),
+    (3, 'Rozbita'),
+    (4, 'Inna sytuacja')
 )
 
 
@@ -103,17 +104,24 @@ class NoCatchmentAreaInformation(models.Model):
     preschool = models.BooleanField(verbose_name='Czy dziecko uczęszczało do przedszkola')
     preschool_years = models.IntegerField(verbose_name='Ile lat dziecko uczęszczało do przedszkola?', null=True)
 
+
 APPLICATION_TYPE = (
-    (1, 'rekrutacja'),
-    (2, 'legitymacja'),
-    (3, 'karta rowerowa'),
-    (4, 'świetlica'),
+    (1, 'PODANIE REKRUTACYJNE'),
+    (2, 'PODANIE O LEGITYMACJĘ'),
+    (3, 'PODANIE O KARTĘ ROWEROWĄ'),
+    (4, 'PODANIE O ZAPIS NA ŚWIETLICĘ'),
+    (5, 'INNE PODANIE'),
 )
+
+
+def app_attachment_directory_path(instance, filename):
+    return 'uploads/{0}/User_{1}/Type_{2}/'.format(instance.sent_date, instance.recruit.id, instance.type, filename)
 
 
 class Application(models.Model):
     sent_date = models.DateField(auto_now=True)
+    type = models.IntegerField('Typ podania', choices=APPLICATION_TYPE)
     recruit = models.ForeignKey(Recruit, on_delete=models.CASCADE)
-    application_content = models.TextField()
-    attachment = models.FileField()
-    type = models.IntegerField(choices=APPLICATION_TYPE)
+    application_content = models.TextField(verbose_name='Treść')
+    attachment = models.FileField(null=True, verbose_name='Załączniki', upload_to=app_attachment_directory_path)
+    application_status = models.IntegerField(verbose_name='Status aplikacji', choices=STATUS, default=1)
