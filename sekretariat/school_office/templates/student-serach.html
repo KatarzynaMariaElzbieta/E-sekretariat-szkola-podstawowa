@@ -1,12 +1,11 @@
-{% extends "base.html" %}
+{% extends "logbase.html" %}
 {% block content %}
 {% load crispy_forms_tags %}
-{{ notlog }}
+
 <h1>Dane dziecka</h1>
-{{ r }}
 <form method="post">
 {% csrf_token %}
     {{ form|crispy }}
-        <br><input type="submit" value="Dalej">
+        <br><input type="submit" value="Szukaj">
 </form>
 {% endblock %}

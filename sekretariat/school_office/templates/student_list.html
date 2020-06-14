@@ -2,32 +2,24 @@
 {% block content %}
 
 <div class="app_list">
-    <a href="{% url 'new_app' %}" id="new_application">Nowe podanie</a>
-    <h2>Lista podań</h2>
-    {% if application_list == "Brak podań" %}
-    {{application_list}}
-    {% else %}
+    <h2>Lista uczniów</h2>
     <table>
         <tr>
-            <th>Numer podania</th>
-            <th>Uczeń</th>
-            <th>Typ podania</th>
-            <th>Data wysłania</th>
-            <th>Status</th>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>PESEL</th>
         </tr>
 
-        {% for i in application_list %}
+        {% for i in students %}
         <tr>
-            <td><a href="{% url 'application-detail' i.id %}">{{i.id}}</a></td>
-            <td><a href="{% url 'recruit' i.recruit.id %}">{{i.recruit.first_name}} {{i.recruit.last_name}}</a></td>
-            <td>{{i.get_type_display}}</td>
-            <td>{{i.sent_date|date:"d.m.y"}}</td>
-            <td>{{i.get_application_status_display}}</td>
+            <td><a href="{% url 'recruit' i.id %}">{{i.first_name}}</a></td>
+            <td><a href="{% url 'recruit' i.id %}">{{i.last_name}}</a></td>
+            <td><a href="{% url 'recruit' i.id %}">{{i.PESEL}}</a></td>
         </tr>
-        <!--      <li class="list-group-item"><a class="btn" href="{% url 'RecruitmentView' 3 %}">Inna klasa</a></li>-->
+        {% empty %}
+        <tr><td colspan="3">Brak studentów spełniających kryteria</td></tr>
         {% endfor %}
     </table>
-    {% endif %}
 </div>
 </div>
 {% endblock %}

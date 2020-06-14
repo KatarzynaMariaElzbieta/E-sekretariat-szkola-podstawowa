@@ -83,16 +83,7 @@ WSGI_APPLICATION = 'sekretariat.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'HOST': '127.0.0.1',
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'school_office2',
-        'USER': 'postgres',
-        'PASSWORD': 'coderslab',
-    }
-}
-
+from sekretariat.sekretariat.local_settings import DATABASES
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -132,4 +123,3 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 LOGIN_URL = reverse_lazy('signin')
-

@@ -16,7 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from school_office.views import base, SignUp, Login, logoutView, recruitment1, RecruitmentView, pdf_view, documents, \
-    my_data, ResetPasswordView, application_list, application_detail, ApplicationFormView, change_status, RecruitDetailView
+    my_data, ResetPasswordView, application_list, application_detail, ApplicationFormView, change_status, RecruitDetailView, \
+    serach, SerachStudents, SerachApplication
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +26,9 @@ urlpatterns = [
     path('', Login.as_view(), name="signin"),
     path('logout/', logoutView, name="logout"),
     path('recruitment1/', recruitment1, name="recruitment1"),
+    path('serach/', serach, name="serach"),
+    path('serach/student/', SerachStudents.as_view(), name="serach-student"),
+    path('serach/application/', SerachApplication.as_view(), name="serach-application"),
     path('recruitment/<int:school_class>', RecruitmentView.as_view(), name="RecruitmentView"),
     path('document/', documents, name='documents'),
     path('my-data/', my_data, name='my_data'),

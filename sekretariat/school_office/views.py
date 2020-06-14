@@ -1,16 +1,16 @@
+from django.contrib.auth import authenticate, login, logout, password_validation
 from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, DetailView
-from django.contrib.auth import authenticate, login, logout, password_validation
+from django.contrib.auth.models import User
 from django.http import FileResponse, Http404
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
-from django.contrib.auth.models import User
+from django.views.generic import TemplateView, DetailView, FormView
 
 from .forms import SignUpForm, LoginForm, ParentForm2, ApprovalForm, ResetPasswordForm, NoCatchmentAreaInformationForm, \
-    ApplicationForm, RecruitmentForm, AddressForm
+    ApplicationForm, RecruitmentForm, AddressForm, StudentSerachForm, ApplicationSerachForm
 from .models import STATUS, Application, CLASSES, Recruit
 
 
@@ -29,6 +29,7 @@ class SignUp(View):
         if form.is_valid():
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
+
             def clean_password(self):
                 password = self.cleaned_data.get('password')
                 errors = dict()
@@ -43,7 +44,7 @@ class SignUp(View):
             password = form.cleaned_data['password']
 
             uname = first_name[0] + "." + last_name
-            is_new_login = User.objects.filter(username__icontains=login).count()
+            is_new_login = User.objects.filter(username__icontains=uname).count()
             if is_new_login != 0:
                 uname += str(is_new_login)
             user = User.objects.create_user(uname, password=password, first_name=first_name, last_name=last_name)
@@ -54,14 +55,18 @@ class SignUp(View):
         return HttpResponse('Niepoprawne dane :<')
 
 
-# wersja dla bezuczniowskich
 class Login(View):
     def get(self, request):
         if request.user.is_anonymous:
             form = LoginForm()
             return render(request, 'sign-in.html', {'form': form})
         else:
-            ctx = {'user': request.user}
+            user = request.user
+            ctx = {'user': user}
+            children = Recruit.objects.filter(user=user)
+            print(children)
+            if children:
+                return redirect('app-list')
             return render(request, 'recruitment.html', ctx)
 
     def post(self, request):
@@ -75,7 +80,10 @@ class Login(View):
                 if user.is_authenticated:
                     login(self.request, user)
                     ctx['user'] = user
-                    # return render(request, 'logbase.html', ctx)
+                    children = Recruit.objects.filter(user=user)
+                    print(children)
+                    if children:
+                        return redirect('app-list')
                     return render(request, 'recruitment.html', ctx)
             form = LoginForm()
             ctx['notlog'] = "Błąd logowania. Spróbuj jeszcze raz."
@@ -86,6 +94,7 @@ class Login(View):
 def logoutView(request):
     logout(request)
     return redirect(reverse('signin'))
+
 
 @login_required
 def recruitment1(request):
@@ -102,6 +111,7 @@ def pdf_view(request, klasa):
                             content_type='application/pdf')
     except FileNotFoundError:
         raise Http404()
+
 
 class RecruitmentView(LoginRequiredMixin, TemplateView):
     permanent_address_form_class = AddressForm
@@ -135,9 +145,9 @@ class RecruitmentView(LoginRequiredMixin, TemplateView):
                                         father_form=father_form,
                                         father_permanent_address_form=father_permanent_address_form,
                                         approval_form=approval_form,
-                                        no_catchment_area_information_form =no_catchment_area_information_form,
+                                        no_catchment_area_information_form=no_catchment_area_information_form,
                                         school_class=school_class,
-                                        classes = CLASSES
+                                        classes=CLASSES
                                         )
 
         if permanent_address_form.is_valid():
@@ -192,7 +202,7 @@ class RecruitmentView(LoginRequiredMixin, TemplateView):
             r.application_status = STATUS[0][0]
             r.approval = ap
             user = User.objects.get(username=request.user)
-            r.user=user
+            r.user = user
             r.save()
             print(r)
             if r.no_catchment_area == 'True':
@@ -206,6 +216,7 @@ class RecruitmentView(LoginRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
+
 
 @login_required
 def my_data(request):
@@ -239,6 +250,7 @@ class ResetPasswordView(LoginRequiredMixin, View):
         else:
             return HttpResponse('')
 
+
 @login_required
 def application_list(request):
     user = User.objects.get(username=request.user)
@@ -248,14 +260,14 @@ def application_list(request):
     else:
         children = Recruit.objects.filter(user=user)
         if not children:
-            application_li="Brak podań"
+            application_li = "Brak podań"
         for i in children:
             app = (Application.objects.filter(recruit=i))
             for i in app:
                 application_li.append(i)
 
-
     return render(request, 'application_list.html', {'application_list': application_li})
+
 
 @login_required
 def application_detail(request, id):
@@ -304,7 +316,6 @@ def change_status(request, id, status):
 
 
 class RecruitDetailView(LoginRequiredMixin, DetailView):
-
     model = Recruit
     queryset = Recruit.objects.all()
     template_name = 'recruit-detail.html'
@@ -312,3 +323,54 @@ class RecruitDetailView(LoginRequiredMixin, DetailView):
     for i in Recruit._meta.fields:
         c.append(i)
     extra_context = {'list': c}
+
+
+def serach(request):
+    return render(request, 'serach.html', {})
+
+
+class SerachStudents(LoginRequiredMixin, FormView):
+    form_class = StudentSerachForm
+    template_name = 'student-serach.html'
+
+    def form_valid(self, form):
+        first_name = form.cleaned_data['first_name']
+        last_name = form.cleaned_data['last_name']
+        PESEL = form.cleaned_data['PESEL']
+        user = User.objects.get(username=self.request.user)
+        if user.has_perm('change_application'):
+            if PESEL:
+                students = Recruit.objects.filter(application_status=2).filter(first_name__icontains=first_name).filter(
+                    last_name__icontains=last_name).filter(PESEL=PESEL)
+            else:
+                students = Recruit.objects.filter(application_status=2).filter(first_name__icontains=first_name).filter(
+                    last_name__icontains=last_name)
+        else:
+            if PESEL:
+                students = Recruit.objects.filter(application_status=2).filter(user=user).filter(
+                    first_name__icontains=first_name).filter(last_name__icontains=last_name).filter(PESEL=PESEL)
+            else:
+                students = Recruit.objects.filter(application_status=2).filter(user=user).filter(
+                    first_name__icontains=first_name).filter(last_name__icontains=last_name)
+
+        return render(self.request, 'student_list.html', {'students': students})
+
+
+class SerachApplication(LoginRequiredMixin, FormView):
+    form_class = ApplicationSerachForm
+    template_name = 'application-serach.html'
+
+    def form_valid(self, form):
+        id = form.cleaned_data['id']
+        sent_date = form.cleaned_data['sent_date']
+        recruit_pesel = form.cleaned_data['recruit_pesel']
+        user = User.objects.get(username=self.request.user)
+        applications = Application.objects.all()
+        if id:
+            applications = applications.filter(id=id)
+        if sent_date:
+            applications = applications.filter(sent_date=sent_date)
+        if recruit_pesel:
+            student = Recruit.objects.get(PESEL=recruit_pesel)
+            applications = applications.filter(recruit=student)
+        return render(self.request, 'application_list.html', {'application_list': applications})

@@ -12,6 +12,8 @@
 <ul>
 {% for i in children %}
 <li><a href="{% url 'recruit' i.id %}">{{i.first_name}} {{i.last_name}}</a></li>
-{% endfor %}
+{% empty %}
+    Brak informacji
+    {% endfor %}
 </ul>
 {% endblock %}

@@ -89,3 +89,21 @@ class ApplicationForm(forms.ModelForm):
         exclude = ['recruit', 'application_status']
 
     attachment = forms.FileField(required=False)
+
+
+class StudentSerachForm(forms.ModelForm):
+    class Meta:
+        model = Recruit
+        fields = ['first_name', 'last_name', 'PESEL']
+    first_name = forms.CharField(label='Imię', required=False)
+    last_name = forms.CharField(label='Nazwisko', required=False)
+    PESEL = forms.CharField(label='PESEL', required=False)
+
+
+class ApplicationSerachForm(forms.Form):
+    id = forms.CharField(label='Numer podania', required=False)
+    sent_date = forms.DateField(label='Data wysłania', widget=forms.DateInput(format='%d-%m-%Y'), input_formats=('%d-%m-%Y', ), required=False, help_text='Wpisz datę w formacie dd-mm-rrrr')
+    recruit_pesel = forms.CharField(label='PESEL ucznia', required=False)
+
+
+
